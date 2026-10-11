@@ -1,0 +1,14 @@
+SW1:
+    vlans:
+        10: USERS
+        20: FINANCE
+        30: SERVERS
+        99: MANAGEMENT
+
+SW2:
+    vlans:
+        10: USERS
+        20: FINANCE
+        30: SERVERS
+        99: MANAGEMENT
+
