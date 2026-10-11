@@ -1,0 +1,12 @@
+devices:
+   - name: R1
+     host: 10.10.99.1
+     device_type: cisco_ios
+
+   - name: SW1
+     host: 10.10.99.11
+     device_type: cisco_ios
+
+   - name: SW2
+     host: 10.10.99.12
+     device_type: cisco_ios
