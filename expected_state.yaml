@@ -9,6 +9,15 @@ SW1:
             mode: access
             access_vlan: 10
             admin_state: up
+    trunks:
+        Ethernet0/0:
+            mode: trunk
+            native_vlan: 1
+            allowed_vlans: [10, 20, 30, 99]
+        Ethernet0/1:
+            mode: trunk
+            native_vlan: 1
+            allowed_vlans: [10, 20, 30, 99]
 
 SW2:
     vlans:
@@ -22,3 +31,9 @@ SW2:
             mode: access
             access_vlan: 30
             admin_state: up
+
+    trunks:
+        Ethernet0/1:
+            mode: trunk
+            native_vlan: 1
+            allowed_vlans: [10, 20, 30, 99]
