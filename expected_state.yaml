@@ -4,6 +4,11 @@ SW1:
         20: FINANCE
         30: SERVERS
         99: MANAGEMENT
+    interfaces:
+        Ethernet0/2:
+            mode: access
+            access_vlan: 10
+            admin_state: up
 
 SW2:
     vlans:
@@ -12,3 +17,8 @@ SW2:
         30: SERVERS
         99: MANAGEMENT
 
+    interfaces:
+        Ethernet0/2:
+            mode: access
+            access_vlan: 30
+            admin_state: up
