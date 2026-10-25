@@ -2,11 +2,10 @@ import json
 from datetime import datetime
 from pathlib import Path
 
-def print_report(results):
-    print("\n")
-    print("=" *70)
-    print("CONFIGURATION COMPLIANCE REPORT")
-    print("=" *70)
+def print_report(
+    results,
+    title="CONFIGURATION COMPLIANCE REPORT",
+):
 
     current_device = None
 
@@ -71,7 +70,7 @@ def print_report(results):
     print(f"OVERALL STATUS: {overall}")
     print("=" *70)
 
-def save_json_report(results):
+def save_json_report(results, prefix="compliance"):
     report_directory = Path("report")
     report_directory.mkdir(exist_ok=True)
 
@@ -81,7 +80,7 @@ def save_json_report(results):
 
     report_path = (
         report_directory
-        / f"compliance_{timestamp}.json"
+        / f"{prefix}_{timestamp}.json"
     )
 
     data = {

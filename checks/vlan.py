@@ -24,7 +24,7 @@ def check_vlans(device_name, connection, expected_vlans):
             for vlan in output
         }
 
-    except (KeyError, Valueerror, TypeError):
+    except (KeyError, ValueError, TypeError):
         return [
             ComplianceResult(
                 device=device_name,

@@ -12,3 +12,9 @@ backups/*
 report/
 reports/
 logs/
+
+# Configuration Drift Detection
+baselines/
+baselines_legacy/
+drift_diffs/
+
