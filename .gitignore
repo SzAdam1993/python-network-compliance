@@ -1,9 +1,14 @@
+# Python
 .venv/
-.env
-__pycache__
-*pyc
-backups/*
-/backups/ .gitkeep
+__pycache__/
+*.pyc
 
-logs/
+# Credentials
+.env
+
+# Generated files
+backups/*
+!backups/.gitkeep
+report/
 reports/
+logs/

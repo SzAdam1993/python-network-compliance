@@ -37,3 +37,14 @@ SW2:
             mode: trunk
             native_vlan: 1
             allowed_vlans: [10, 20, 30, 99]
+
+R1:
+    acls:
+        TO_SERVERS:
+            rules:
+                10: "deny ip 10.10.20.0 0.0.0.255 10.10.30.0 0.0.0.255"
+                20: "permit ip 10.10.10.0 0.0.0.255 10.10.30.0 0.0.0.255"
+                30: "permit ip any 10.10.30.0 0.0.0.255"
+            binding:
+                interface: Ethernet0/0.30
+                direction: out
