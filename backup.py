@@ -40,9 +40,16 @@ for device in inventory["devices"]:
                 "show running-config",
                 read_timeout=30,
             )
-            if "%Invalid inout" in running_config:
-                print("f[PARANCSHIBA] {name}: show running-config")
+            if not any(
+                line.strip() == "end"
+                for line in running_config.splitlines()
+            ):
+                print(
+                    f"[PARANCSHIBA] {name}: "
+                    "hiányos running-config. "
+                )
                 continue
+
             device_backup_dir = backup_root /name
             device_backup_dir.mkdir(exist_ok=True)
 
@@ -55,7 +62,7 @@ for device in inventory["devices"]:
                 encoding = "utf-8",
             )
             print(f"[MENTÉS OK] {backup_file}")
-    except NetmikoAutheticationException:
+    except NetmikoAuthenticationException:
         print(f"[HITELESITŐ HIBA] {name}")
     except NetmikoTimeoutException:
         print(f"[NEM ELÉRHETŐ] {name}")

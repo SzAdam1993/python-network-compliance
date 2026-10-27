@@ -13,7 +13,7 @@ def normalize_interface_name(interface_name):
             return interface_name.replace(
                 long_name, short_name, 1
             )
-        return interface_name
+    return interface_name
 
 def normalize_mode(mode):
     mode = str(mode).strip().lower()
@@ -71,7 +71,7 @@ def check_interfaces(device_name, connection, expected_interfaces):
     except (KeyError, TypeError):
         return [
             ComplianceResult(
-                device=devic_name,
+                device=device_name,
                 category="INTERFACE",
                 target="Feldolgozás",
                 status="NOT_EVALUATED",

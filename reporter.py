@@ -7,6 +7,11 @@ def print_report(
     title="CONFIGURATION COMPLIANCE REPORT",
 ):
 
+    print()
+    print("=" * 70)
+    print(title)
+    print("=" * 70)
+
     current_device = None
 
     for result in results:
