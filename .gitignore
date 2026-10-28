@@ -18,3 +18,5 @@ baselines/
 baselines_legacy/
 drift_diffs/
 
+# SSH host keys
+/ssh_host_keys/

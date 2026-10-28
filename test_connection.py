@@ -1,37 +1,62 @@
-import os
+
 import yaml
-from dotenv import load_dotenv
-from netmiko import ConnectHandler
-from netmiko.exceptions import (NetmikoAuthenticationException, NetmikoTimeoutException, )
 
-load_dotenv()
-username = os.getenv ("DEVICE_USERNAME")
-password = os.getenv ("DEVICE_PASSWORD")
+from netmiko.exceptions import (
+    NetmikoAuthenticationException,
+    NetmikoTimeoutException,
+)
 
-with open ("inventory.yaml","r", encoding="utf-8") as File:
-	inventory = yaml.safe_load(File)
+from connection import connect_to_device
 
-for device in inventory["devices"]:
-    print(f"\n Kapcsolódás: {device['name']} ({device['host']})")
 
-    connection_parameters={
-	"device_type": device["device_type"],
-	"host": device["host"],
-	"username": username,
-	"password": password,
-	 }
+def main():
+    with open(
+        "inventory.yaml",
+        "r",
+        encoding="utf-8",
+    ) as file:
+        inventory = yaml.safe_load(file)
 
-    try:
-         with ConnectHandler(**connection_parameters) as Connection:
-             output = Connection.send_command("show ip interface brief")
-         print (f"[SIKERES] {device ['name']}")
-         print (output)
+    failures = 0
 
-    except NetmikoAuthenticationException:
-        print(f"[HITELESÍTÉSI HIBA] {device ['name']}")
+    for device in inventory["devices"]:
+        name = device["name"]
+        host = device["host"]
 
-    except NetmikoTimeoutException:
-        print(f"[NEM ELÉRHETŐ] {device['name']}")
+        print(f"\nKapcsolódás: {name} ({host})")
 
-    except Exceptions as error:
-        print("f[EGYÉB HIBA]{device['name']}:{error}")
+        try:
+            with connect_to_device(device) as connection:
+                output = connection.send_command(
+                    "show ip interface brief"
+                )
+
+            if not output.strip():
+                raise ValueError("Üres parancskimenet.")
+
+            print(f"[PASS] {name}: SSH-kapcsolat")
+            print(output)
+
+        except NetmikoAuthenticationException:
+            failures += 1
+            print(f"[HIBA] {name}: hitelesítési hiba")
+
+        except NetmikoTimeoutException:
+            failures += 1
+            print(f"[HIBA] {name}: időtúllépés")
+
+        except Exception as error:
+            failures += 1
+            print(
+                f"[HIBA] {name}: "
+                f"{type(error).__name__}"
+            )
+
+    if failures:
+        raise SystemExit(1)
+
+    print("\nMindhárom SSH-kapcsolat sikeres.")
+
+
+if __name__ == "__main__":
+    main()
