@@ -3,7 +3,7 @@ import re
 import yaml
 
 from dotenv import load_dotenv
-from netmiko import ConnectHandler
+from connection import connect_to_device
 from netmiko.exceptions import(
     NetmikoAuthenticationException,
     NetmikoTimeoutException,
@@ -134,8 +134,7 @@ for device in inventory["devices"]:
     }
 
     try:
-        with ConnectHandler(
-            **connection_parameters) as connection:
+        with connect_to_device(device) as connection:
 
             for acl_name, expected_acl in (
                 expected_state[name]["acls"].items()
