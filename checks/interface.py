@@ -26,6 +26,36 @@ def normalize_mode(mode):
 
     return mode
 
+
+def parse_interface_status(raw_status):
+    """
+    Cisco interfészállapot értelmezése.
+
+    Visszatérési érték:
+    (adminisztratív állapot, operatív állapot)
+    """
+
+    if not isinstance(raw_status, str):
+        return None, None
+
+    status = " ".join(
+        raw_status.strip().lower().split()
+    )
+
+    if status == "administratively down":
+        return "down", "down"
+
+    if status == "up":
+        return "up", "up"
+
+    if status == "down":
+        return "up", "down"
+
+    return None, None
+
+
+
+
 def check_interfaces(device_name, connection, expected_interfaces):
 
     results = []
@@ -157,38 +187,76 @@ def check_interfaces(device_name, connection, expected_interfaces):
             )
         )
 
-#3. Interfész működési állapota
 
-        if name not in interface_states:
-            results.append(
-                ComplianceResult(
-                    device=device_name,
-                    category="INTERFACE",
-                    target=f"{name} állapot",
-                    status="NOT_EVALUATED",
-                    message="Az interfészállapot nem található. ",
-                )
-            )
-            continue
 
-        actual_state = interface_states[name].get("status")
+ # 3. Adminisztratív és operatív állapot
 
-        expected_state = expected["admin_state"]
+        state_data = interface_states.get(name)
+
+        raw_status = (
+            state_data.get("status")
+            if state_data is not None
+            else None
+        )
+
+        admin_state, oper_state = (
+            parse_interface_status(raw_status)
+        )
+
+        expected_admin = str(
+            expected["admin_state"]
+        ).strip().lower()
 
         results.append(
             ComplianceResult(
                 device=device_name,
                 category="INTERFACE",
-                target=f"{name} állapot ",
+                target=f"{name} admin állapot",
                 status=(
-                    "NOT_EVALUATED" if not actual_state
-                    else "PASS" if actual_state == expected_state
+                    "NOT_EVALUATED"
+                    if admin_state is None
+                    else "PASS"
+                    if admin_state == expected_admin
                     else "FAIL"
                 ),
-                message="Interfész működési állapota. ",
-                expected=expected_state,
-                actual=actual_state,
+                message=(
+                    "Adminisztratív állapot ellenőrzése "
+                    "a Cisco Status mező alapján."
+                ),
+                expected=expected_admin,
+                actual=admin_state,
             )
         )
+
+        # Az operatív állapot ellenőrzése opcionális.
+        # Csak akkor hoz létre új ellenőrzést,
+        # ha az elvárt állapotban szerepel.
+
+        if "oper_state" in expected:
+            expected_oper = str(
+                expected["oper_state"]
+            ).strip().lower()
+
+            results.append(
+                ComplianceResult(
+                    device=device_name,
+                    category="INTERFACE",
+                    target=f"{name} operatív állapot",
+                    status=(
+                        "NOT_EVALUATED"
+                        if oper_state is None
+                        else "PASS"
+                        if oper_state == expected_oper
+                        else "FAIL"
+                    ),
+                    message=(
+                        "Tényleges interfészállapot "
+                        "ellenőrzése."
+                    ),
+                    expected=expected_oper,
+                    actual=oper_state,
+                )
+            )
+
 
     return results

@@ -9,6 +9,7 @@ SW1:
             mode: access
             access_vlan: 10
             admin_state: up
+            oper_state: up
     trunks:
         Ethernet0/0:
             mode: trunk
@@ -31,6 +32,7 @@ SW2:
             mode: access
             access_vlan: 30
             admin_state: up
+            oper_state: up
 
     trunks:
         Ethernet0/1:
