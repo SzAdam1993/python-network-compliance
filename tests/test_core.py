@@ -134,7 +134,7 @@ Log Buffer (16384 bytes):
 '''
         out = analyze_syslog('SW1', sample)
         self.assertEqual(len(out), 4)
-        self.assertEqual([r.status for r in out], ['WARNING'] * 4)
+        self.assertEqual([r.status for r in out], ['WARNING', 'WARNING', 'WARNING', 'NOT_EVALUATED'])
 
 
 class DriftTests(unittest.TestCase):

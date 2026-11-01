@@ -20,3 +20,6 @@ drift_diffs/
 
 # SSH host keys
 /ssh_host_keys/
+
+# Local test evidence
+/evidence/
