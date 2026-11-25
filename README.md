@@ -102,7 +102,7 @@ Syslog bizonyíték mentése:
 
 ## Kontrollált konfigurációmódosítás
 
-Példa az SW1 teszt accessportjának módosítására:
+Példa az SW1 teszt access portjának módosítására:
 
     python run_changes.py set-access-vlan --device SW1 --interface Ethernet0/2 --vlan 40
 
@@ -124,7 +124,7 @@ A teljes egységteszt-készlet futtatása:
 
 A projekt 27 automatizált egységtesztet tartalmaz.
 
-Az integrációs tesztek a következőket vizsgálták:
+Az integrációs tesztek többek között a következőket vizsgálták:
 
 - TC-01: Access VLAN-eltérés és helyreállítás
 - TC-02: Trunk VLAN-lista eltérése és helyreállítás
